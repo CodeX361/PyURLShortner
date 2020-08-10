@@ -1,5 +1,5 @@
 # Importing Required Modules
-from tkinter import *
+import tkinter
 from tkinter import messagebox
 from tkinter.scrolledtext import ScrolledText
 import json
@@ -26,28 +26,28 @@ def color(rgb):
    return "#%02x%02x%02x" % rgb
 
 # App GUI Configurations
-root=Tk()
+root=tkinter.Tk()
 root.title(f"{AppName} By {AppDeveloper} Version {AppVersion}")
 root.geometry("900x600")
 root.resizable(0,0)
 root.config(bg=color((22,22,22)))
 
 # App Variables
-url=StringVar()
-nickname=StringVar()
+url=tkinter.StringVar()
+nickname=tkinter.StringVar()
 
 # App GUI Heading And Sub Heading
-app_title=Label(root,text="PyURLocker",font=("forte",40,"bold"),bg=color((22,22,22)),fg="aqua").pack()
-app_sub_heading=Label(root,text="An Easy To Use URL Storing App",font=("berlin sans fb demi",12,"bold"),bg=color((22,22,22)),fg="aqua").pack()
+tkinter.Label(root,text="PyURLocker",font=("forte",40,"bold"),bg=color((22,22,22)),fg="aqua").pack()
+tkinter.Label(root,text="An Easy To Use URL Storing App",font=("berlin sans fb demi",12,"bold"),bg=color((22,22,22)),fg="aqua").pack()
 
 # App List Box
-list_box=Listbox(root,bg=color((21,21,21)),width=95,height=20,font=("berlin sans fb demi",11,"bold"),fg="white",selectmode=SINGLE)
+list_box=tkinter.Listbox(root,bg=color((21,21,21)),width=95,height=20,font=("berlin sans fb demi",11,"bold"),fg="white",selectmode=tkinter.SINGLE)
 list_box.place(x=20,y=160)
 
 # Function To Add Items To List From Dictionary (Database)
 def addListItems():
    for Item in data:
-      list_box.insert(END,Item)
+      list_box.insert(tkinter.END,Item)
 
 addListItems()
 
@@ -64,7 +64,7 @@ def addURL():
          BaseFile.update(new_shorten_url)
          file.seek(0)
          json.dump(BaseFile,file)
-         list_box.insert(END,f"{site_name}")
+         list_box.insert(tkinter.END,f"{site_name}")
    elif (site_url=="") or (site_name==""):
       messagebox.showerror("Error","Please Enter Something In URL/URL Name Field!")
 
@@ -75,7 +75,7 @@ def removeItem():
       current_selection=list_box.get(current_selection)
       #print(data[current_selection])
 
-      list_box.delete(ANCHOR)
+      list_box.delete(tkinter.ANCHOR)
 
       with open("data\MetaData.PYUS","r+") as mainfile:
          data=json.load(mainfile)
@@ -93,6 +93,9 @@ def removeItem():
 
 # Function To Open The URL Directly
 def openURL():
+   DataFile=open("data/MetaData.PYUS","r+")
+   data=json.load(DataFile)
+   DataFile.close()
    current_selection=list_box.curselection()
    current_selection=list_box.get(current_selection)
    item=data[current_selection]
@@ -103,7 +106,7 @@ def openURL():
 # Function To Remove All Items From Database And List
 def removeAll():
    try:
-      list_box.delete(0,END)
+      list_box.delete(0,tkinter.END)
       with open("data\MetaData.PYUS","r+") as mainfile:
          mainfile.truncate(0)
          mainfile.write("{}")
@@ -114,33 +117,36 @@ def removeAll():
 
 # Function To Copy The Link Of The URL
 def copyLink():
+   DataFile=open("data/MetaData.PYUS","r+")
+   data=json.load(DataFile)
+   DataFile.close()
    current_selection=list_box.curselection()
    current_selection=list_box.get(current_selection)
    item=data[current_selection]
    pyperclip.copy(item)      
 
 # App GUI Labels
-enter_url=Label(root,text="Enter The URL",font=("ubuntu",9,"bold"),bg=color((22,22,22)),fg="white")
+enter_url=tkinter.Label(root,text="Enter The URL",font=("ubuntu",9,"bold"),bg=color((22,22,22)),fg="white")
 enter_url.place(x=20,y=100)
-url_nickname=Label(root,text="Enter A Name For The URL",font=("ubuntu",9,"bold"),bg=color((22,22,22)),fg="white")
+url_nickname=tkinter.Label(root,text="Enter A Name For The URL",font=("ubuntu",9,"bold"),bg=color((22,22,22)),fg="white")
 url_nickname.place(x=440,y=100)
 
 # App GUI URL Entry Box
-add_url=Entry(root,textvar=url,font=("berlin sans fb demi",12,"bold"),width=40)
+add_url=tkinter.Entry(root,textvar=url,font=("berlin sans fb demi",12,"bold"),width=40)
 add_url.place(x=20,y=125)
-url_name=Entry(root,textvar=nickname,font=("berlin sans fb demi",12,"bold"),width=27)
+url_name=tkinter.Entry(root,textvar=nickname,font=("berlin sans fb demi",12,"bold"),width=27)
 url_name.place(x=440,y=125)
 
 # App GUI Button
-add_url_button=Button(root,text="Shorten",font=("berlin sans fb demi",10,"bold"),bg=color((0,255,0)),fg="white",width=20,bd=4,command=addURL)
+add_url_button=tkinter.Button(root,text="Shorten",font=("berlin sans fb demi",10,"bold"),bg=color((0,255,0)),fg="white",width=20,bd=4,command=addURL)
 add_url_button.place(x=730,y=121)
-open_url_button=Button(root,text="Open Link",font=("berlin sans fb demi",10,"bold"),bg=color((0,255,0)),fg="white",width=23,bd=4,command=openURL)
+open_url_button=tkinter.Button(root,text="Open Link",font=("berlin sans fb demi",10,"bold"),bg=color((0,255,0)),fg="white",width=23,bd=4,command=openURL)
 open_url_button.place(x=20,y=553)
-remove_item_button=Button(root,text="Remove Item",font=("berlin sans fb demi",10,"bold"),bg=color((0,255,0)),fg="white",width=23,bd=4,command=removeItem)
+remove_item_button=tkinter.Button(root,text="Remove Item",font=("berlin sans fb demi",10,"bold"),bg=color((0,255,0)),fg="white",width=23,bd=4,command=removeItem)
 remove_item_button.place(x=240,y=553)
-remove_all_items=Button(root,text="Remove All Items",font=("berlin sans fb demi",10,"bold"),bg=color((0,255,0)),fg="white",width=23,bd=4,command=removeAll)
+remove_all_items=tkinter.Button(root,text="Remove All Items",font=("berlin sans fb demi",10,"bold"),bg=color((0,255,0)),fg="white",width=23,bd=4,command=removeAll)
 remove_all_items.place(x=480,y=553)
-copy_link=Button(root,text="Copy Link",font=("berlin sans fb demi",10,"bold"),bg=color((0,255,0)),fg="white",width=23,bd=4,command=copyLink)
+copy_link=tkinter.Button(root,text="Copy Link",font=("berlin sans fb demi",10,"bold"),bg=color((0,255,0)),fg="white",width=23,bd=4,command=copyLink)
 copy_link.place(x=705,y=553)
 
 # App GUI Mainloop
